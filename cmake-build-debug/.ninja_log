@@ -1,0 +1,16 @@
+# ninja log v6
+1	25	1723974315526161314	CMakeFiles/practicing_C.dir/main.c.o	3f6f33e1af3f28ae
+1	48	1723974315526161314	CMakeFiles/practicing_C.dir/practicing.c.o	c1628208a72601a0
+48	78	1723974315570161859	practicing_C	fecf6727302e3ac4
+2	31	1723977646518423881	CMakeFiles/practicing_C.dir/main.c.o	3f6f33e1af3f28ae
+31	56	1723977646550424276	practicing_C	fecf6727302e3ac4
+1	28	1723978283817410460	CMakeFiles/practicing_C.dir/main.c.o	3f6f33e1af3f28ae
+28	50	1723978283841410702	practicing_C	fecf6727302e3ac4
+2	34	1723978386154429512	CMakeFiles/practicing_C.dir/main.c.o	3f6f33e1af3f28ae
+34	61	1723978386186429828	practicing_C	fecf6727302e3ac4
+1	25	1723978444519003511	CMakeFiles/practicing_C.dir/main.c.o	3f6f33e1af3f28ae
+25	46	1723978444543003746	practicing_C	fecf6727302e3ac4
+1	33	1723979558583404198	CMakeFiles/practicing_C.dir/main.c.o	3f6f33e1af3f28ae
+33	59	1723979558615404574	practicing_C	fecf6727302e3ac4
+1	30	1723979764321745904	CMakeFiles/practicing_C.dir/main.c.o	3f6f33e1af3f28ae
+30	51	1723979764349746214	practicing_C	fecf6727302e3ac4

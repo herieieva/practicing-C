@@ -1,0 +1,3 @@
+/home/viktoriia/CLionProjects/practicing-C/cmake-build-debug/CMakeFiles/practicing_C.dir
+/home/viktoriia/CLionProjects/practicing-C/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/viktoriia/CLionProjects/practicing-C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
