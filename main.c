@@ -4,7 +4,7 @@
 
 int main()
 {
-    // creating array of random numbers
+    /*// creating array of random numbers
     int array_size = 10;
     int array[ array_size ];
 
@@ -29,7 +29,7 @@ int main()
     fclose( file_ptr );
 
     // creating single linked list, rewriting numbers from the file
-    SingleListNode* descriptor = CreateList();
+    SingleListNode* descriptor = CreateSingleList();
 
     file_ptr = fopen( "my_file.txt", "r" );
     if ( file_ptr == NULL )
@@ -67,7 +67,25 @@ int main()
 
     fclose( file_ptr );
 
-    DeleteList( descriptor );
+    DeleteList( descriptor );*/
+
+    DoubleListNode* descriptor = CreateDoubleList();
+
+    AddAt( descriptor, 0, 1 );
+    AddAt( descriptor, 1, 2 );
+    AddAt( descriptor, 2, 1 );
+    AddAt( descriptor, 3, 4 );
+    AddAt( descriptor, 4, 5 );
+
+    printf( "Is Double Linked List empty: %d\n", IsDoubleListEmpty( descriptor ) );
+
+    ShowDoubleList( descriptor );
+
+    SortDoubleList( descriptor );
+
+    ShowDoubleList( descriptor );
+
+    DeleteDoubleList( descriptor );
 
     return 0;
 }

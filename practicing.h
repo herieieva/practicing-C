@@ -9,7 +9,7 @@ typedef struct SingleListNode
     struct SingleListNode* next;
 } SingleListNode;
 
-SingleListNode* CreateList();
+SingleListNode* CreateSingleList();
 
 void AddBackNode( int data, SingleListNode* descriptor );
 
@@ -45,4 +45,30 @@ void DeleteList( SingleListNode* descriptor );
 
 int* GenerateRandom( int min, int max, int destination[], int size );
 
+// Double linked list
+
+typedef struct DoubleListNode
+{
+    int data;
+    struct DoubleListNode* prev;
+    struct DoubleListNode* next;
+} DoubleListNode;
+
+DoubleListNode* CreateDoubleList();
+
+bool AddAt( DoubleListNode* descriptor, int number, int data );
+
+void ShowDoubleList( DoubleListNode* descriptor );
+
+bool DoubleDeleteAt( DoubleListNode* descriptor, int position );
+
+int DoubleListSize( DoubleListNode* descriptor );
+
+bool IsDoubleListEmpty(DoubleListNode* descriptor);
+
+void MergeDoubleList( int start_left, int left_end, int right_end, DoubleListNode* descriptor );
+
+void SortDoubleList( DoubleListNode* descriptor );
+
+void DeleteDoubleList( DoubleListNode* descriptor );
 #endif // PRACTICING_C__PRACTICING_H_
