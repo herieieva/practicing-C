@@ -114,11 +114,11 @@ int main()
 
     TreeDS* descriptor = CreateTree();
 
-    TreeInsert( "D", descriptor );
-    TreeInsert( "C", descriptor );
-    TreeInsert( "B", descriptor );
-    TreeInsert( "A", descriptor );
-    TreeInsert( "J", descriptor );
+    TreeInsert( "A",descriptor->root, descriptor );
+    TreeInsert( "S", descriptor->root,descriptor );
+    TreeInsert( "V", descriptor->root,descriptor );
+    TreeInsert( "C", descriptor->root,descriptor );
+    TreeInsert( "J", descriptor->root,descriptor );
 
     // writing
 

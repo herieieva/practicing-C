@@ -153,7 +153,7 @@ void PostOrderDisplay( TreeNode* node );
 
 TreeDS* CreateTree();
 
-TreeNode* TreeInsert( const char* data, TreeDS* descriptor );
+void TreeInsert( const char* data, TreeNode* root_ptr, TreeDS* descriptor );
 
 bool DeleteNode( const char* key, TreeNode* ptr );
 

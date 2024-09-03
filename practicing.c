@@ -951,7 +951,6 @@ void InOrderDisplay( TreeNode* node )
         printf( "%c", node->data );
         InOrderDisplay( node->right );
     }
-
 }
 
 void PostOrderDisplay( TreeNode* node )
@@ -983,27 +982,48 @@ bool FReadTree( TreeDS* descriptor, FILE* file )
         return false;
     }
 
-    char temp[1];
+    char temp[ 1 ];
     while ( fread( temp, sizeof( char ), 1, file ) == 1 )
     {
-        TreeInsert( temp, descriptor );
+        TreeInsert( temp, descriptor->root, descriptor );
     }
     return true;
 }
 
-TreeNode* TreeInsert( const char* data, TreeDS* descriptor )
+void TreeInsert( const char* data, TreeNode* root_ptr, TreeDS* descriptor )
 {
-    TreeNode** ptr = &( descriptor->root );
-
-    while ( *ptr )
+    // Handle the case when the tree is empty (root_ptr is NULL)
+    if ( root_ptr == NULL )
     {
-        if ( *data < ( *ptr )->data )
+        TreeNode* new_node = (TreeNode*) malloc( sizeof( TreeNode ) );
+        if ( !new_node )
         {
-            ptr = &( ( *ptr )->left );
+            perror( "Memory allocation failed" );
+            fprintf( stderr, "Error: Probably not enough space!\n" );
+            exit( EXIT_FAILURE );
+        }
+
+        new_node->data = *data;
+        new_node->left = new_node->right = NULL;
+
+        descriptor->root = new_node;
+        descriptor->size++;
+        return;
+    }
+
+    TreeNode *parent = NULL, *current = root_ptr;
+
+    // Traverse the tree to find the insertion point
+    while ( current != NULL )
+    {
+        parent = current;
+        if ( *data < current->data )
+        {
+            current = current->left;
         }
         else
         {
-            ptr = &( ( *ptr )->right );
+            current = current->right;
         }
     }
 
@@ -1015,15 +1035,21 @@ TreeNode* TreeInsert( const char* data, TreeDS* descriptor )
         exit( EXIT_FAILURE );
     }
 
+    new_node->data = *data;
     new_node->left = new_node->right = NULL;
-    new_node->data                   = *data;
 
-    *ptr = new_node;
+    // Insert the new node as the child of the parent
+    if ( *data < parent->data )
+    {
+        parent->left = new_node;
+    }
+    else
+    {
+        parent->right = new_node;
+    }
 
     descriptor->size++;
-
-    return new_node;
-} //todo: update
+}
 
 bool DeleteNode( const char* key, TreeNode* root_ptr )
 {
@@ -1063,10 +1089,10 @@ bool DeleteNode( const char* key, TreeNode* root_ptr )
         parent  = child_parent;
     }
 
-// when the current node has only 1 child
+    // when the current node has only 1 child
     TreeNode* last_child = ( current->left )
         ? current->left
-        : current->right; //we initialize new variable with the node that exists
+        : current->right; // we initialize new variable with the node that exists
 
     if ( !parent ) // current node is the root node
     {
