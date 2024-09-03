@@ -1,4 +1,4 @@
-/snap/clion/291/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/291/bin/ninja/linux/x64/ninja -G Ninja -S /home/viktoriia/CLionProjects/practicing-C -B /home/viktoriia/CLionProjects/practicing-C/cmake-build-debug
+/snap/clion/292/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/292/bin/ninja/linux/x64/ninja -G Ninja -S /home/viktoriia/CLionProjects/practicing-C -B /home/viktoriia/CLionProjects/practicing-C/cmake-build-debug
 -- The C compiler identification is GNU 11.4.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done

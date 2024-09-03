@@ -2,9 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-SingleListNode* CreateSingleList()
+/*SingleListNode* CreateSingleList()
 {
     SingleListNode* descriptor = (SingleListNode*) malloc( sizeof( SingleListNode ) );
     if ( !descriptor )
@@ -534,9 +533,9 @@ bool DoubleDeleteAt( DoubleListNode* descriptor, int position )
         return true;
     }
 
-  //a node before the node we want to delete has to know what it's "new next node" is
+    // a node before the node we want to delete has to know what it's "new next node" is
     temp->next      = ptr->next;
-    ptr->next->prev = temp; //the "new next node" has to know it's "new previous"
+    ptr->next->prev = temp; // the "new next node" has to know it's "new previous"
     free( ptr );
     return true;
 }
@@ -633,4 +632,475 @@ void DeleteDoubleList( DoubleListNode* descriptor )
     free( descriptor );
 
     printf( "The list with descriptor deleted!\n" );
+}
+
+// Stack
+
+StackNode* CreateStack()
+{
+    StackNode* descriptor = (StackNode*) malloc( sizeof( StackNode ) );
+    if ( !descriptor )
+    {
+        perror( "Memory allocation failed" );
+        fprintf( stderr, "Error: Probably not enough space!\n" );
+        exit( EXIT_FAILURE );
+    }
+
+    descriptor->next = NULL;
+
+    return descriptor;
+}
+
+void StackPush( StackNode* descriptor, int data )
+{
+    StackNode* new_node = (StackNode*) malloc( sizeof( StackNode ) );
+    if ( !new_node )
+    {
+        perror( "Memory allocation failed" );
+        fprintf( stderr, "Error: Probably not enough space!\n" );
+        exit( EXIT_FAILURE );
+    }
+
+    new_node->data = data;
+    new_node->next = descriptor->next;
+
+    descriptor->next = new_node;
+}
+
+void ShowStack( StackNode* descriptor )
+{
+    StackNode* ptr = descriptor->next;
+
+    while ( ptr )
+    {
+        printf( "%d ", ptr->data );
+        ptr = ptr->next;
+    }
+    printf( "\n" );
+}
+
+int ReadAndDeleteTop( StackNode* descriptor )
+{
+    if ( descriptor->next == NULL )
+    {
+        printf( "Error! The stack is empty. Nothing to delete (apart from descriptor)\n" );
+    }
+
+    StackNode* ptr = descriptor->next;
+
+    descriptor->next = ptr->next;
+
+    int data = ptr->data;
+
+    free( ptr );
+
+    return data;
+}
+
+void DeleteStack( StackNode* descriptor )
+{
+    StackNode* ptr = descriptor;
+
+    while ( ptr != NULL )
+    {
+        StackNode* temp = ptr;
+        ptr             = ptr->next;
+        free( temp );
+    }
+}
+
+// Queue
+
+QueueDesc* CreateQueue()
+{
+    QueueDesc* descriptor = (QueueDesc*) malloc( sizeof( QueueDesc ) );
+    if ( !descriptor )
+    {
+        perror( "Memory allocation failed" );
+        fprintf( stderr, "Error: Probably not enough dynamic memory.\n" );
+        exit( EXIT_FAILURE );
+    }
+
+    descriptor->size  = 0;
+    descriptor->first = NULL;
+    descriptor->last  = NULL;
+
+    return descriptor;
+}
+
+void PriorityAdd( QueueDesc* descriptor, int data, int priority )
+{
+    QueueNode* new = (QueueNode*) malloc( sizeof( QueueNode ) );
+    if ( !new )
+    {
+        perror( "Memory allocation failed" );
+        fprintf( stderr, "Error: Probably not enough dynamic memory.\n" );
+        exit( EXIT_FAILURE );
+    }
+
+    new->data     = data;
+    new->next     = NULL;
+    new->priority = priority;
+
+    if ( descriptor->first == NULL )
+    {
+        descriptor->first = new;
+        descriptor->last  = new;
+        ++descriptor->size;
+        return;
+    }
+
+    QueueNode* pre_ptr = descriptor->first;
+    QueueNode* ptr     = descriptor->first;
+    for ( ; ptr && ptr->priority <= priority; ptr = ptr->next )
+    {
+        pre_ptr = ptr;
+    }
+
+    if ( !ptr )
+    {
+        descriptor->last->next = new;
+        descriptor->last       = new;
+    }
+    else if ( ptr == descriptor->first )
+    {
+        new->next         = descriptor->first;
+        descriptor->first = new;
+    }
+    else
+    {
+        pre_ptr->next = new;
+        new->next     = ptr;
+    }
+
+    descriptor->size++;
+}
+
+int PopFirst( QueueDesc* descriptor )
+{
+    QueueNode* ptr  = descriptor->first;
+    QueueNode* next = ptr->next; // second node
+
+    descriptor->first = next;
+
+    next->next = ptr->next->next; // assign third element`s address to the second "next" field
+
+    int result = ptr->data;
+    free( ptr );
+    return result;
+}
+
+void ShowQueue( QueueDesc* descriptor )
+{
+    QueueNode* ptr = descriptor->first;
+
+    while ( ptr )
+    {
+        printf( "%d ", ptr->data );
+        ptr = ptr->next;
+    }
+
+    printf( "\n" );
+}
+
+void DeleteQueue( QueueDesc* descriptor )
+{
+    if ( !descriptor )
+    {
+        return;
+    }
+
+    QueueNode* ptr = descriptor->first;
+    QueueNode* next;
+
+    while ( ptr )
+    {
+        next = ptr->next;
+        free( ptr );
+        ptr = next;
+    }
+
+    free( descriptor );
+}
+
+// Deque
+
+DequeNode* CreateDeque( int size )
+{
+    DequeNode* descriptor = (DequeNode*) malloc( sizeof( DequeNode ) );
+
+    descriptor->data      = (int*) malloc( sizeof( int ) * size );
+    descriptor->data[ 0 ] = size;
+
+    descriptor->next = NULL;
+    descriptor->prev = NULL;
+
+    return descriptor;
+}
+
+DequeNode* NewDequeNode( DequeNode* descriptor )
+{
+    DequeNode* new_node = (DequeNode*) malloc( sizeof( DequeNode ) );
+    if ( !new_node )
+    {
+        perror( "Memory allocation failed" );
+        fprintf( stderr, "Error: Probably not enough dynamic memory.\n" );
+        exit( EXIT_FAILURE );
+    }
+
+    new_node->data = (int*) malloc( sizeof( int ) * descriptor->data[ 0 ] );
+    new_node->next = NULL;
+
+    if ( descriptor->next == NULL )
+    {
+        new_node->prev = descriptor;
+
+        descriptor->next = new_node;
+
+        return new_node;
+    }
+
+    DequeNode* ptr = descriptor->next;
+    while ( ptr->next != NULL )
+    {
+        ptr = ptr->next;
+    }
+
+    new_node->prev = ptr;
+
+    ptr->next = new_node;
+
+    return new_node;
+}
+
+int DequeSize( DequeNode* descriptor )
+{
+    DequeNode* ptr = descriptor->next;
+
+    int counter = 0;
+    for ( ; ptr; ++counter )
+    {
+        ptr = ptr->next;
+    }
+
+    return counter * descriptor->data[ 0 ];
+}
+
+void InitializeDeque( DequeNode* descriptor, const int array[], int size )
+{
+    while ( DequeSize( descriptor ) < size )
+    {
+        NewDequeNode( descriptor );
+    }
+
+    DequeNode* ptr = descriptor->next;
+    for ( int array_ind = 0; array_ind < size; ptr = ptr->next )
+    {
+        for ( int counter = 0; counter < descriptor->data[ 0 ] && array_ind < size;
+              ++counter, ++array_ind )
+        {
+            ptr->data[ counter ] = array[ array_ind ];
+            printf("%d ",  ptr->data[ counter ]);
+        }
+    }
+}
+
+void DeleteDeque( DequeNode* descriptor )
+{
+    DequeNode* ptr = descriptor->next;
+
+    for ( DequeNode* prev = descriptor; ptr; ptr = prev->next )
+    {
+        free( prev->data );
+        free( prev );
+        prev = ptr;
+    }
+}*/
+
+TreeDS* CreateTree()
+{
+    TreeDS* descriptor = (TreeDS*) malloc( sizeof( TreeDS ) );
+    if ( !descriptor )
+    {
+        perror( "Memory allocation failed" );
+        fprintf( stderr, "Error: Probably not enough space!\n" );
+        exit( EXIT_FAILURE );
+    }
+
+    descriptor->root = NULL;
+    descriptor->size = 0;
+
+    return descriptor;
+}
+
+void PreOrderDisplay( TreeNode* node )
+{
+    if ( node )
+    {
+        printf( "%c", node->data );
+        PreOrderDisplay( node->left );
+        PreOrderDisplay( node->right );
+    }
+}
+
+void InOrderDisplay( TreeNode* node )
+{
+    if ( node )
+    {
+        InOrderDisplay( node->left );
+        printf( "%c", node->data );
+        InOrderDisplay( node->right );
+    }
+
+}
+
+void PostOrderDisplay( TreeNode* node )
+{
+    if ( node )
+    {
+        PostOrderDisplay( node->left );
+        PostOrderDisplay( node->right );
+        printf( "%c", node->data );
+    }
+}
+
+bool FWriteTree( TreeNode* node, FILE* file )
+{
+    if ( node )
+    {
+        FWriteTree( node->left, file );
+        fwrite( &node->data, sizeof( node->data ), 1, file );
+        FWriteTree( node->right, file );
+    }
+
+    return true;
+}
+
+bool FReadTree( TreeDS* descriptor, FILE* file )
+{
+    if ( !descriptor )
+    {
+        return false;
+    }
+
+    char temp[1];
+    while ( fread( temp, sizeof( char ), 1, file ) == 1 )
+    {
+        TreeInsert( temp, descriptor );
+    }
+    return true;
+}
+
+TreeNode* TreeInsert( const char* data, TreeDS* descriptor )
+{
+    TreeNode** ptr = &( descriptor->root );
+
+    while ( *ptr )
+    {
+        if ( *data < ( *ptr )->data )
+        {
+            ptr = &( ( *ptr )->left );
+        }
+        else
+        {
+            ptr = &( ( *ptr )->right );
+        }
+    }
+
+    TreeNode* new_node = (TreeNode*) malloc( sizeof( TreeNode ) );
+    if ( !new_node )
+    {
+        perror( "Memory allocation failed" );
+        fprintf( stderr, "Error: Probably not enough space!\n" );
+        exit( EXIT_FAILURE );
+    }
+
+    new_node->left = new_node->right = NULL;
+    new_node->data                   = *data;
+
+    *ptr = new_node;
+
+    descriptor->size++;
+
+    return new_node;
+} //todo: update
+
+bool DeleteNode( const char* key, TreeNode* root_ptr )
+{
+    if ( !root_ptr ) // empty tree
+    {
+        return false;
+    }
+
+    TreeNode *current = root_ptr, *parent = NULL;
+
+    while ( current && *key != current->data ) // looking for the node to delete (current)
+    {
+        parent  = current;
+        current = ( *key < current->data ) ? current->left : current->right;
+    }
+    if ( !current ) // no such node in the tree
+    {
+        return false;
+    }
+
+    if ( current->right
+         && current->left ) // if the node meant to be deleted (current) has two children
+    {
+        TreeNode *child, *child_parent;
+
+        child = current->right;
+
+        while ( child->left )
+        {
+            child_parent = child;
+            child        = child->left;
+        }
+
+        current->data = child->data;
+
+        current = child;
+        parent  = child_parent;
+    }
+
+// when the current node has only 1 child
+    TreeNode* last_child = ( current->left )
+        ? current->left
+        : current->right; //we initialize new variable with the node that exists
+
+    if ( !parent ) // current node is the root node
+    {
+        root_ptr = last_child; // exclude the current node, but remember the nodes that go after it
+    }
+    else if ( parent->left == current ) // link the child (left or right) and parent
+    {
+        parent->left = last_child;
+    }
+    else
+    {
+        parent->right = last_child;
+    }
+
+    free( current );
+    return true;
+}
+
+void DeleteTreeHelper( TreeNode* node )
+{
+    if ( node == NULL )
+    {
+        return;
+    }
+
+    DeleteTreeHelper( node->left );
+    DeleteTreeHelper( node->right );
+
+    free( node );
+}
+
+void DeleteTree( TreeDS* descriptor )
+{
+    DeleteTreeHelper( descriptor->root );
+
+    free( descriptor );
 }

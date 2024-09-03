@@ -67,9 +67,7 @@ int main()
 
     fclose( file_ptr );
 
-    DeleteList( descriptor );*/
-
-    DoubleListNode* descriptor = CreateDoubleList();
+    DeleteList( descriptor );*//*DoubleListNode* descriptor = CreateDoubleList();
 
     AddAt( descriptor, 0, 1 );
     AddAt( descriptor, 1, 2 );
@@ -85,7 +83,83 @@ int main()
 
     ShowDoubleList( descriptor );
 
-    DeleteDoubleList( descriptor );
+    DeleteDoubleList( descriptor );*//*StackNode* descriptor = CreateStack();
+    printf( "Stack was created\n" );
+
+    StackPush( descriptor, 1 );
+    StackPush( descriptor, 2 );
+    StackPush( descriptor, 3 );
+    StackPush( descriptor, 4 );
+
+    printf( "Deleted element: %d\n", ReadAndDeleteTop( descriptor ) );
+
+    ShowStack( descriptor );
+
+    DeleteStack( descriptor );
+    printf( "Stack was deleted\n" );*//*QueueDesc* descriptor = CreateQueue();
+    printf( "A queue was created\n" );
+
+    PriorityAdd( descriptor, 1, 1 );
+    PriorityAdd( descriptor, 1, 1 );
+    PriorityAdd( descriptor, 2, 2 );
+    PriorityAdd( descriptor, 3, 3 );
+    PriorityAdd( descriptor, 4, 4 );
+
+    PopFirst( descriptor );
+
+    ShowQueue( descriptor );
+
+    DeleteQueue( descriptor );
+    printf( "A queue was deleted\n" );*/
+
+    TreeDS* descriptor = CreateTree();
+
+    TreeInsert( "D", descriptor );
+    TreeInsert( "C", descriptor );
+    TreeInsert( "B", descriptor );
+    TreeInsert( "A", descriptor );
+    TreeInsert( "J", descriptor );
+
+    // writing
+
+    FILE* file;
+    file = fopen( "tree_file.bin", "wb" );
+    if ( file == NULL )
+    {
+        perror( "Error opening file" );
+        return 1;
+    }
+
+    // DeleteNode( "A", descriptor->root );
+
+    InOrderDisplay( descriptor->root );
+
+    FWriteTree( descriptor->root, file );
+
+    DeleteTree( descriptor );
+
+    fclose( file );
+
+    // reading
+
+    FILE* file_read;
+    file_read = fopen( "tree_file.bin", "rb" );
+    if ( file_read == NULL )
+    {
+        perror( "Error opening file" );
+        return 0;
+    }
+
+    TreeDS* new_tree_ds = CreateTree();
+
+    FReadTree( new_tree_ds, file_read );//rewrite data from the file to the new tree
+
+    printf( "\n" );
+    InOrderDisplay( new_tree_ds->root );
+
+    fclose( file_read );
+
+    DeleteTree( new_tree_ds );
 
     return 0;
 }
