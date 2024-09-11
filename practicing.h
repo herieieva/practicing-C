@@ -165,4 +165,12 @@ void DeleteTreeHelper( TreeNode* node );
 
 void DeleteTree( TreeDS* descriptor );
 
+int RecursiveLinearSearch( int key, int pos, int array[], int size );
+
+int RecursiveBinarySearch( int key, int array[], int size, int low, int high );
+
+int RecursiveInterpolarSearch( int key, int array[], int size, int low, int high );
+
+int ModuloBasedHash( int input, int modulus );
+
 #endif // PRACTICING_C__PRACTICING_H_
