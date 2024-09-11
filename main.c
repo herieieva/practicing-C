@@ -177,12 +177,11 @@ DeleteTree( new_tree_ds );
     int buckets_size = 10;
 
     SingleListNode** hash_buckets =
-        (SingleListNode**) calloc( buckets_size,
-                                   sizeof( SingleListNode* ) ); /// todo: deallocate memory!!
+        (SingleListNode**) calloc( buckets_size, sizeof( SingleListNode* ) );
 
     for ( int counter = 0; counter < buckets_size; ++counter )
     {
-        hash_buckets[ counter ] = CreateSingleList(); /// todo: deallocate memory!!
+        hash_buckets[ counter ] = CreateSingleList();
     }
 
     int random_num_arr[ buckets_size ];
@@ -191,11 +190,13 @@ DeleteTree( new_tree_ds );
 
     for ( int counter = 0; counter < buckets_size; ++counter )
     {
-        int position = ModuloBasedHash( random_num_arr[ counter ], 7 );
+        // int position = ModuloBasedHash( random_num_arr[ counter ], 7 );
+        // int position = MultiplicativeHash(random_num_arr[ counter ], buckets_size);
+        int position = SquareHash( random_num_arr[ counter ], buckets_size );
 
         if ( hash_buckets[ position ]->next )
         {
-            AddBefore( 1, random_num_arr[ counter ], hash_buckets[ position ] ); // 1st pos?
+            AddBefore( 1, random_num_arr[ counter ], hash_buckets[ position ] );
         }
         else
         {

@@ -9,3 +9,4 @@ add_executable(practicing_C
         main.c
         practicing.c
         practicing.h)
+target_link_libraries(practicing_C m)

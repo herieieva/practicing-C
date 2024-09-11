@@ -1,5 +1,6 @@
 #include "practicing.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -677,10 +678,10 @@ void ShowLast( SingleListNode* descriptor )
 
 void ShowList( SingleListNode* descriptor )
 {
-  if(!descriptor->next)
+    if ( !descriptor->next )
     {
-    printf( "This list is empty. \n" );
-    return;
+        printf( "This list is empty. \n" );
+        return;
     }
 
     SingleListNode* ptr = descriptor->next;
@@ -1205,7 +1206,25 @@ int RecursiveInterpolarSearch( int key, int array[], int size, int low, int high
     }
 }
 
-int ModuloBasedHash( int input, int modulus )
+int ModuloBasedHash( const int input, const int modulus )
 {
     return input % modulus;
 }
+
+int MultiplicativeHash( const int input, const int size )
+{
+    const double fi            = 0.6180339887;
+    const double multiplicated = input * fi;
+    double fractionalPart      = multiplicated - floor( multiplicated );
+    int hash                   = fractionalPart * size;
+    return hash;
+}
+
+int SquareHash( const int input, const int size )
+  {
+  int square = input * input;
+  int result_size = 16;
+  int shift = (32 - result_size) / 2;
+  int hash_value = ((square >> shift) & 0xffff);
+  return hash_value%size;
+  }

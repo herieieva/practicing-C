@@ -173,4 +173,8 @@ int RecursiveInterpolarSearch( int key, int array[], int size, int low, int high
 
 int ModuloBasedHash( int input, int modulus );
 
+int MultiplicativeHash( int input, int size );
+
+int SquareHash( const int input, const int size );
+
 #endif // PRACTICING_C__PRACTICING_H_
