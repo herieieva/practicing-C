@@ -5,10 +5,31 @@
 #include <stdlib.h>
 #include <time.h>
 
-/*
+#define USING_DOUBLE_LINKED_LIST 0
+#define USING_STACK 0
+#define USING_QUEUE 0
+#define USING_DEQUEUE 0
+#define USING_LIST 1
+#define USING_TREE 0
+#define USING_HASH 1
 
- // Double linked list
+int* GenerateRandom( int min, int max, int destination[], int size )
+  {
+  int array_size = size;
 
+  unsigned int seed = time( 0 );
+
+  int rand_int;
+  for ( int counter = 0; counter < array_size; ++counter )
+    {
+    rand_int               = rand_r( &seed ) % ( max - min + 1 + min );
+    destination[ counter ] = rand_int;
+    }
+
+  return destination;
+  }
+
+#if USING_DOUBLE_LINKED_LIST > 0
 DoubleListNode* CreateDoubleList()
 {
     DoubleListNode* descriptor = (DoubleListNode*) malloc( sizeof( DoubleListNode ) );
@@ -153,6 +174,45 @@ bool DoubleDeleteAt( DoubleListNode* descriptor, int position )
     return true;
 }
 
+DoubleListNode* ModifyDoubleList( DoubleListNode* descriptor, int position )
+  {
+  if ( position > DoubleListSize( descriptor ) )
+    {
+    return NULL;
+    }
+
+  DoubleListNode* ptr = descriptor->next;
+
+  for ( int counter = 0; counter < position; ++counter )
+    {
+    ptr = ptr->next;
+    }
+
+  return ptr;
+  }
+
+void RewriteDoubleList( DoubleListNode* from, int to[], int start, int end )
+  {
+  DoubleListNode* ptr = from->next;
+
+  ++start;
+  ++end;
+
+  int size = end - start + 1;
+  int counter;
+
+  for ( counter = 1; counter < start; ++counter )
+    {
+    ptr = ptr->next;
+    }
+
+  for ( int index = 0; index < size; ++index )
+    {
+    to[ index ] = ptr->data;
+    ptr         = ptr->next;
+    }
+  }
+
 void MergeDoubleList( int start_left, int left_end, int right_end, DoubleListNode* descriptor )
 {
     int left_size  = left_end - start_left + 1;
@@ -247,8 +307,10 @@ void DeleteDoubleList( DoubleListNode* descriptor )
     printf( "The list with descriptor deleted!\n" );
 }
 
-// Stack
+#endif //USING_DOUBLE_LINKED_LIST
 
+
+#if USING_STACK > 0
 StackNode* CreateStack()
 {
     StackNode* descriptor = (StackNode*) malloc( sizeof( StackNode ) );
@@ -321,9 +383,9 @@ void DeleteStack( StackNode* descriptor )
         free( temp );
     }
 }
+#endif //USING_STACK
 
-// Queue
-
+#if USING_QUEUE > 0
 QueueDesc* CreateQueue()
 {
     QueueDesc* descriptor = (QueueDesc*) malloc( sizeof( QueueDesc ) );
@@ -435,9 +497,9 @@ void DeleteQueue( QueueDesc* descriptor )
 
     free( descriptor );
 }
+#endif //USING_QUEUE
 
-// Deque
-
+#if USING_DEQUEUE > 0
 DequeNode* CreateDeque( int size )
 {
     DequeNode* descriptor = (DequeNode*) malloc( sizeof( DequeNode ) );
@@ -528,8 +590,10 @@ void DeleteDeque( DequeNode* descriptor )
         free( prev );
         prev = ptr;
     }
-}*/
+}
+#endif //USING_DEQUEUE
 
+#if USING_LIST > 0
 SingleListNode* CreateSingleList()
 {
     SingleListNode* descriptor = (SingleListNode*) malloc( sizeof( SingleListNode ) );
@@ -693,7 +757,9 @@ void ShowList( SingleListNode* descriptor )
     }
     printf( "\n" );
 }
+#endif //USING_LIST
 
+#if USING_LIST > 0
 bool IsListEmpty( SingleListNode* descriptor )
 {
     if ( descriptor->next == NULL )
@@ -720,48 +786,9 @@ SingleListNode* ModifyListAt( SingleListNode* descriptor, int position )
     return ptr;
 }
 
-/*DoubleListNode* ModifyDoubleList( DoubleListNode* descriptor, int position )
-{
-    if ( position > DoubleListSize( descriptor ) )
-    {
-        return NULL;
-    }
-
-    DoubleListNode* ptr = descriptor->next;
-
-    for ( int counter = 0; counter < position; ++counter )
-    {
-        ptr = ptr->next;
-    }
-
-    return ptr;
-}*/
-
 void RewriteFromList( SingleListNode* from, int to[], int start, int end )
 {
     SingleListNode* ptr = from->next;
-
-    ++start;
-    ++end;
-
-    int size = end - start + 1;
-    int counter;
-
-    for ( counter = 1; counter < start; ++counter )
-    {
-        ptr = ptr->next;
-    }
-
-    for ( int index = 0; index < size; ++index )
-    {
-        to[ index ] = ptr->data;
-        ptr         = ptr->next;
-    }
-}
-
-void RewriteDoubleList( DoubleListNode* from, int to[], int start, int end )
-{
-    DoubleListNode* ptr = from->next;
 
     ++start;
     ++end;
@@ -910,23 +937,9 @@ void DeleteList( SingleListNode* descriptor )
 
     free( descriptor );
 }
+#endif //USING_LIST
 
-int* GenerateRandom( int min, int max, int destination[], int size )
-{
-    int array_size = size;
-
-    unsigned int seed = time( 0 );
-
-    int rand_int;
-    for ( int counter = 0; counter < array_size; ++counter )
-    {
-        rand_int               = rand_r( &seed ) % ( max - min + 1 + min );
-        destination[ counter ] = rand_int;
-    }
-
-    return destination;
-}
-
+#if USING_TREE > 0
 TreeDS* CreateTree()
 {
     TreeDS* descriptor = (TreeDS*) malloc( sizeof( TreeDS ) );
@@ -1140,6 +1153,7 @@ void DeleteTree( TreeDS* descriptor )
 
     free( descriptor );
 }
+#endif //USING_TREE
 
 int RecursiveLinearSearch( int key, int pos, int array[], int size )
 {
@@ -1206,6 +1220,7 @@ int RecursiveInterpolarSearch( int key, int array[], int size, int low, int high
     }
 }
 
+#if USING_HASH > 0
 int ModuloBasedHash( const int input, const int modulus )
 {
     return input % modulus;
@@ -1221,10 +1236,16 @@ int MultiplicativeHash( const int input, const int size )
 }
 
 int SquareHash( const int input, const int size )
-  {
-  int square = input * input;
-  int result_size = 16;
-  int shift = (32 - result_size) / 2;
-  int hash_value = ((square >> shift) & 0xffff);
-  return hash_value%size;
-  }
+{
+    int square      = input * input;
+    int result_size = 16;
+    int shift       = ( 32 - result_size ) / 2;
+    int hash_value  = ( ( square >> shift ) & 0xffff );
+    return hash_value % size;
+}
+
+int LinearProbingHash( const int input, const int size, const int i )
+{
+    return ( input % size + i ) % size;
+}
+#endif //USING_HASH

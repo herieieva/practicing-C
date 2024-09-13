@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define buckets_size 10
+
 int main()
 {
     /*// creating array of random numbers
@@ -174,15 +176,8 @@ DeleteTree( new_tree_ds );
 
      printf( "\n%d\n", result );*/
 
-    int buckets_size = 10;
 
-    SingleListNode** hash_buckets =
-        (SingleListNode**) calloc( buckets_size, sizeof( SingleListNode* ) );
-
-    for ( int counter = 0; counter < buckets_size; ++counter )
-    {
-        hash_buckets[ counter ] = CreateSingleList();
-    }
+    int* hash_buckets = (int*) calloc( buckets_size, sizeof( int ) );
 
     int random_num_arr[ buckets_size ];
 
@@ -194,20 +189,35 @@ DeleteTree( new_tree_ds );
         // int position = MultiplicativeHash(random_num_arr[ counter ], buckets_size);
         int position = SquareHash( random_num_arr[ counter ], buckets_size );
 
-        if ( hash_buckets[ position ]->next )
+        if ( hash_buckets[ position ] == 0 )
         {
-            AddBefore( 1, random_num_arr[ counter ], hash_buckets[ position ] );
+            hash_buckets[ position ] = random_num_arr[ counter ];
         }
         else
         {
-            AddBackNode( random_num_arr[ counter ], hash_buckets[ position ] );
+            int prob_counter;
+            for ( prob_counter = 0; hash_buckets[ position ] != 0 && prob_counter < buckets_size;
+                  ++prob_counter )
+            {
+                position =
+                    LinearProbingHash( random_num_arr[ counter ], buckets_size, prob_counter );
+            }
+
+            if ( prob_counter < buckets_size )
+            {
+                hash_buckets[ position ] = random_num_arr[ counter ];
+            }
+            else
+            {
+                printf( "Error: Hash table is full!\n" );
+                break;
+            }
         }
     }
 
-    for ( int counter = 0; counter < buckets_size; ++counter )
+  for (int i = 0; i < buckets_size; ++i)
     {
-        ShowList( hash_buckets[ counter ] );
-        DeleteList( hash_buckets[ counter ] );
+    printf("%d ", hash_buckets[i]);
     }
 
     free( hash_buckets );

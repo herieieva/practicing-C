@@ -177,4 +177,6 @@ int MultiplicativeHash( int input, int size );
 
 int SquareHash( const int input, const int size );
 
+int LinearProbingHash( const int input, const int size, const int i );
+
 #endif // PRACTICING_C__PRACTICING_H_
